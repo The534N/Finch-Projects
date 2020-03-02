@@ -329,7 +329,171 @@ namespace FinchControl_Starter
         //-------------//
         static void DisplayDataRecorder(Finch myFinch)
         {
+            double action;
+            int numberOfDataPoints = 0;
+            double dataPointsFrequency = 0;
+            double[] temperatures = null;
 
+            Console.Clear();
+            Console.WriteLine("\nChoose an Action");
+            Console.WriteLine("1.) Number of Data Points");
+            Console.WriteLine("2.) Frequency of data points");
+            Console.WriteLine("3.) Get Data");
+            Console.WriteLine("4.) Show Data");
+            Console.WriteLine("5.) Quit");
+            Console.WriteLine();
+
+            double.TryParse(Console.ReadLine(), out action);
+            switch (action)
+            {
+                case 1:
+                    numberOfDataPoints = DataRecorderDisplayGetNumberOfDataPoints(myFinch);
+                    break;
+
+                case 2:
+                    dataPointsFrequency = DataRecorderDisplayGetFrequencyOfDataPoints(myFinch);
+                    break;
+
+                case 3:
+                    temperatures = DataRecorderDisplayGetData(numberOfDataPoints, dataPointsFrequency, myFinch);
+                    break;
+
+                case 4:
+                    DataRecorderDisplayData(temperatures);
+                    break;
+
+                case 5:
+                    DisplayMainMenu(myFinch);
+                    break;
+
+                default:
+                    break;
+            }
+
+        }
+        //---------------------------------//
+        //Display Get Number Of Data Points//
+        //---------------------------------//
+        static int DataRecorderDisplayGetNumberOfDataPoints(Finch myFinch)
+        {
+            int numberOfDataPoints;
+            string userResponse;
+            bool validResponse;
+
+            DisplayHeader("Number of Data Points");
+
+            do
+            {
+                Console.WriteLine("Enter Number of Data Points");
+                userResponse = Console.ReadLine();
+
+                validResponse = int.TryParse(userResponse, out numberOfDataPoints);
+
+                if (!validResponse)
+                {
+                    Console.WriteLine("Incorrect format");
+                }
+
+            } while (validResponse == false);
+
+            DisplayContinuePrompt();
+            DisplayDataRecorder(myFinch);
+            return numberOfDataPoints;
+        }
+        //-------------//
+        //Get Frequency//
+        //-------------//
+        static double DataRecorderDisplayGetFrequencyOfDataPoints(Finch myFinch)
+        {
+            double dataPointsFrequency;
+            string userResponse;
+            bool validResponse;
+
+            DisplayHeader("Frequency of Data Points");
+
+            do
+            {
+                Console.WriteLine("Enter Frequency of Data Points");
+                userResponse = Console.ReadLine();
+
+                validResponse = double.TryParse(userResponse, out dataPointsFrequency);
+
+                if (!validResponse)
+                {
+                    Console.WriteLine("Incorrect format");
+                }
+
+            } while (validResponse == false);
+            DisplayContinuePrompt();
+            DisplayDataRecorder(myFinch);
+            return dataPointsFrequency;
+
+        }
+        //--------//
+        //Get Data//
+        //--------//
+        static double[] DataRecorderDisplayGetData(int numberOfDataPoints, double dataPointsFrequency, Finch myFinch)
+        {
+            double[] temperatures = new double[numberOfDataPoints];
+            int frequencyInSeconds;
+            DisplayHeader("Get Data");
+
+            Console.WriteLine($"You have {numberOfDataPoints} and {dataPointsFrequency}");
+
+            Console.WriteLine("The finch robot is ready to record temperature");
+            DisplayContinuePrompt();
+
+            for (int index = 0; index < numberOfDataPoints; index++)
+            {
+                temperatures[index] = myFinch.getTemperature();
+                Console.WriteLine($"Data #{index + 1}: {temperatures[index]} in celcius. {index + 1}: {(temperatures[index] * 9 / 5) + 32} in fahrenheit");
+                frequencyInSeconds = (int)(dataPointsFrequency * 1000);
+                myFinch.wait(frequencyInSeconds);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Current Data");
+            DataRecorderDisplayTable(temperatures);
+
+            DisplayContinuePrompt();
+            DisplayDataRecorder(myFinch);
+            return temperatures;
+        }
+        //---------//
+        //Show Data//
+        //---------//
+        static void DataRecorderDisplayData(double[] temperatures)
+        {
+
+            DisplayHeader("Data");
+
+            DataRecorderDisplayData(temperatures);
+
+            DisplayContinuePrompt();
+        }
+        //-------------//
+        //Display Table//
+        //-------------//
+        static void DataRecorderDisplayTable(double[] temperatures)
+        {
+            Console.WriteLine(
+                "Data Point".PadLeft(12) +
+                "Temperature".PadLeft(10)
+                );
+            Console.WriteLine(
+                "----------".PadLeft(12) +
+                "-----------".PadLeft(10)
+                );
+
+            for (int index = 0; index < temperatures.Length; index++)
+            {
+                Console.WriteLine(
+                    (index + 1).ToString("N2").PadLeft(12) +
+                    temperatures[index].ToString("n2").PadLeft(10)
+                     );
+            }
+
+            DisplayContinuePrompt();
         }
         #endregion
 
