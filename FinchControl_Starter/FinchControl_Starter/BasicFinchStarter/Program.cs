@@ -10,10 +10,8 @@ namespace FinchControl_Starter
         // Author:Sean Donovan                                              //
         // Description:Coding assingments within Mission 3                  //
         // Date Created:2/27/2020                                           //
-        // Last Date Edited:01/03/2020                                       //       
+        // Last Date Edited:01/03/2020                                      //       
         //------------------------------------------------------------------//
-
-
 
         //----//
         //Main//   
@@ -504,8 +502,149 @@ namespace FinchControl_Starter
         //------------//
         static void DisplayAlarmSystem(Finch myFinch)
         {
+            string sensorToMonitor;
+            string rangeType = "";
+            int setThreshHold;
+            int timeToMonitor;
+            double action;
+
+            Console.Clear();
+
+            DisplayHeader("Alarm System");
+
+            Console.WriteLine("\nChoose an Action");
+            Console.WriteLine("1.) Choose Sensor to Monitor");
+            Console.WriteLine("2.) Set Range");
+            Console.WriteLine("3.) Set Thresh Hold");
+            Console.WriteLine("4.) Set Monitor time");
+            Console.WriteLine("5.) Set Alarm");
+            Console.WriteLine("6.) Quit");
+            Console.WriteLine();
+
+            double.TryParse(Console.ReadLine(), out action);
+            switch (action)
+            {
+                case 1:
+                    sensorToMonitor = DisplaySensorToMonitor(myFinch);
+                    break;
+
+                case 2:
+                    rangeType = DisplaySetRange();
+                    break;
+
+                case 3:
+                    setThreshHold = DisplaySetThreshHold(rangeType, myFinch);
+                    break;
+
+                case 4:
+                    timeToMonitor = DisplayTimeToMonitor();
+                    break;
+
+                case 5:
+                    
+                    break;
+                
+                case 6:
+                    DisplayClosingScreen();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        //-------------//
+        //Choose Sensor//
+        //-------------//
+        static string DisplaySensorToMonitor(Finch myFinch) 
+        {
+            string sensorToMonitor;
+            DisplayHeader("Set Sensor to Monitor");
+
+            Console.WriteLine("Choose Sensor");
+            Console.WriteLine("1.) Left");
+            Console.WriteLine("2.) Right");
+            Console.WriteLine("3.) Both");
+            sensorToMonitor = Console.ReadLine().ToLower();
+
+            DisplayContinuePrompt();
+            return sensorToMonitor;
+        }
+        //---------//
+        //Set Range//
+        //---------//
+        static string DisplaySetRange()
+        {
+            string rangeType;
+
+            DisplayHeader("Set Range");
+
+            Console.WriteLine("Set Range");
+            rangeType = Console.ReadLine();
+
+            DisplayContinuePrompt();
+            return rangeType;
 
         }
+        //---------------//
+        //Set Thresh Hold//
+        //---------------//
+        static int DisplaySetThreshHold(string rangeType, Finch myFinch)
+        {
+            int setThreshHold;
+            string userResponse;
+            bool validResponse;
+
+            do
+            {
+                DisplayHeader("Min/Max Threshold Value");
+
+                Console.WriteLine($"Current Left light sensor value: {myFinch.getLeftLightSensor()}");
+                Console.WriteLine($"Current right light sensor value: {myFinch.getRightLightSensor()}");
+                Console.WriteLine();
+
+                Console.WriteLine("Set Threshold:");
+                userResponse = Console.ReadLine();
+
+                validResponse = int.TryParse(userResponse, out setThreshHold);
+
+                if (!validResponse)
+                {
+                    Console.WriteLine("Incorrect format");
+                }
+
+            } while (validResponse == false);
+
+            DisplayContinuePrompt();
+            return setThreshHold;
+        }
+        //----------------//
+        //Set monitor time//
+        //----------------//
+        static int DisplayTimeToMonitor()
+        {
+            int timeToMonitor;
+            bool validResponse;
+            string userResponse;
+
+            DisplayHeader("Set Time To Monitor");
+
+            do
+            {
+                Console.WriteLine("Set Time:");
+                userResponse = Console.ReadLine();
+
+                validResponse = int.TryParse(userResponse, out timeToMonitor);
+
+                if (!validResponse)
+                {
+                    Console.WriteLine("Incorrect format");
+                }
+            } while (!validResponse);
+
+            DisplayContinuePrompt();
+            return timeToMonitor;
+        }
+
         #endregion
 
     }
