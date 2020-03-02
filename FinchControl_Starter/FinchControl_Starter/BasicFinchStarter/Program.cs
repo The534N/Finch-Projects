@@ -30,6 +30,7 @@ namespace FinchControl_Starter
             // connect to finch//
             //-----------------//
             myFinch.connect();
+            Console.ForegroundColor = ConsoleColor.Green;
 
             //-------//
             //Process//
