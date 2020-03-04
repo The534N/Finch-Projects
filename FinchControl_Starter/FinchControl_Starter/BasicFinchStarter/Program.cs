@@ -502,10 +502,10 @@ namespace FinchControl_Starter
         //------------//
         static void DisplayAlarmSystem(Finch myFinch)
         {
-            string sensorToMonitor;
-            string rangeType = "";
-            int setThreshHold;
-            int timeToMonitor;
+            string sensorToMonitor = null;
+            string rangeType = null;
+            int setThreshHold = 0;
+            int timeToMonitor = 0;
             double action;
 
             Console.Clear();
@@ -541,9 +541,9 @@ namespace FinchControl_Starter
                     break;
 
                 case 5:
-                    
+                    DisplaySetAlarm(myFinch, sensorToMonitor, rangeType, setThreshHold, timeToMonitor);
                     break;
-                
+
                 case 6:
                     DisplayClosingScreen();
                     break;
@@ -555,8 +555,9 @@ namespace FinchControl_Starter
         //-------------//
         //Choose Sensor//
         //-------------//
-        static string DisplaySensorToMonitor(Finch myFinch) 
+        static string DisplaySensorToMonitor(Finch myFinch)
         {
+
             string sensorToMonitor;
             DisplayHeader("Set Sensor to Monitor");
 
@@ -644,7 +645,96 @@ namespace FinchControl_Starter
             DisplayContinuePrompt();
             return timeToMonitor;
         }
+        //---------//
+        //Set Alarm//
+        //---------//
+        static void DisplaySetAlarm(Finch myFinch, string sensorToMonitor, string rangeType, int setThreshHold, int timeToMonitor)
+        {
+            int currentLightSensorValue = 0;
+            int elapsedTime = 0;
+            bool thresholdExceeded = false;
+            DisplayHeader("Set Alarm System");
 
+            Console.WriteLine($"Sensors used: {sensorToMonitor}");
+            Console.WriteLine($"Range: {rangeType}");
+            Console.WriteLine($"Threshold: {setThreshHold}");
+            Console.WriteLine($"Monitoring time: {timeToMonitor}");
+            Console.WriteLine();
+
+            Console.WriteLine("Press any key to begin monitoring.");
+            Console.ReadKey();
+
+            while (!thresholdExceeded && elapsedTime < timeToMonitor)
+            {
+                DisplayGetCurrentSensorValue(myFinch, sensorToMonitor, currentLightSensorValue);
+
+                DisplayMonitorLightSensors(myFinch, rangeType, elapsedTime, currentLightSensorValue, setThreshHold, thresholdExceeded);
+            }
+            if (thresholdExceeded)
+            {
+                Console.WriteLine($"The {rangeType} threshhold value of {setThreshHold} was exceedded.");
+                myFinch.setMotors(255, -255);
+                myFinch.noteOn(587);
+                myFinch.wait(5000);
+            }
+            else if (!thresholdExceeded)
+            {
+                Console.WriteLine($"The threshold was not exceeded");
+            }
+
+
+            DisplayContinuePrompt();
+        }
+        //------------------------//
+        //Get Current Sensor Value//
+        //------------------------//
+        static int DisplayGetCurrentSensorValue(Finch myFinch, string sensorToMonitor, int currentLightSensorValue)
+        {
+
+            switch (sensorToMonitor)
+            {
+                case "left":
+                    currentLightSensorValue = myFinch.getLeftLightSensor();
+                    break;
+
+                case "right":
+                    currentLightSensorValue = myFinch.getRightLightSensor();
+                    break;
+
+                case "both":
+                    currentLightSensorValue = myFinch.getLeftLightSensor() + myFinch.getRightLightSensor() / 2;
+                    break;
+
+            }
+            return currentLightSensorValue;
+        }
+        //---------------------//
+        //Monitor Light Sensors//
+        //---------------------//
+        static bool DisplayMonitorLightSensors(Finch myFinch, string rangeType, int elapsedTime, int currentLightSensorValue, int setThreshHold, bool thresholdExceeded)
+        {
+            switch (rangeType)
+            {
+                case "min":
+                    if (currentLightSensorValue < setThreshHold)
+                    {
+                        thresholdExceeded = true;
+                    }
+                    break;
+
+                case "max":
+                    if (currentLightSensorValue > setThreshHold)
+                    {
+                        thresholdExceeded = true;
+                    }
+                    break;
+
+            }
+            myFinch.wait(1000);
+            elapsedTime++;
+
+            return thresholdExceeded;
+        }
         #endregion
 
     }
