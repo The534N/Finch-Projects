@@ -128,6 +128,9 @@ namespace FinchControl_Starter
         {
             double action;
             Console.Clear();
+
+            DisplayHeader("Talent Show");
+
             Console.WriteLine("\nChoose an Action");
             Console.WriteLine("1.) Light show");
             Console.WriteLine("2.) Play a Song");
@@ -335,6 +338,9 @@ namespace FinchControl_Starter
             double[] temperatures = null;
 
             Console.Clear();
+
+            DisplayHeader("Talent Show");
+
             Console.WriteLine("\nChoose an Action");
             Console.WriteLine("1.) Number of Data Points");
             Console.WriteLine("2.) Frequency of data points");
