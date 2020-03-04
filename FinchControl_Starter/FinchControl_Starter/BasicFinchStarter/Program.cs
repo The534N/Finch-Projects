@@ -101,8 +101,8 @@ namespace FinchControl_Starter
             Console.WriteLine("1.) Talent Show");
             Console.WriteLine("2.) Data Recorder");
             Console.WriteLine("3.) Alarm System");
-            Console.WriteLine("4.) ");
-            Console.WriteLine("5.) Quit Program");
+            Console.WriteLine("4.) User Program");
+            Console.WriteLine("5.) Quit");
             Console.WriteLine();
             double.TryParse(Console.ReadLine(), out assignment);
             switch (assignment)
@@ -120,7 +120,7 @@ namespace FinchControl_Starter
                     break;
 
                 case 4:
-
+                    DisplayUserProgram(myFinch);
                     break;
 
                 case 5:
@@ -761,6 +761,10 @@ namespace FinchControl_Starter
             DisplayAlarmSystem(myFinch);
             return thresholdExceeded;
         }
+        #endregion
+
+        #region User Program
+
         #endregion
 
     }
