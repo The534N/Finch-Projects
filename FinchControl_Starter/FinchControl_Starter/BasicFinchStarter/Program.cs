@@ -568,6 +568,7 @@ namespace FinchControl_Starter
             sensorToMonitor = Console.ReadLine().ToLower();
 
             DisplayContinuePrompt();
+            DisplayAlarmSystem(myFinch);
             return sensorToMonitor;
         }
         //---------//
@@ -583,6 +584,7 @@ namespace FinchControl_Starter
             rangeType = Console.ReadLine();
 
             DisplayContinuePrompt();
+            DisplayAlarmSystem(myFinch);
             return rangeType;
 
         }
@@ -616,6 +618,7 @@ namespace FinchControl_Starter
             } while (validResponse == false);
 
             DisplayContinuePrompt();
+            DisplayAlarmSystem(myFinch);
             return setThreshHold;
         }
         //----------------//
@@ -643,6 +646,7 @@ namespace FinchControl_Starter
             } while (!validResponse);
 
             DisplayContinuePrompt();
+            DisplayAlarmSystem(myFinch);
             return timeToMonitor;
         }
         //---------//
@@ -684,6 +688,7 @@ namespace FinchControl_Starter
 
 
             DisplayContinuePrompt();
+            DisplayAlarmSystem(myFinch);
         }
         //------------------------//
         //Get Current Sensor Value//
@@ -706,6 +711,8 @@ namespace FinchControl_Starter
                     break;
 
             }
+
+            DisplayAlarmSystem(myFinch);
             return currentLightSensorValue;
         }
         //---------------------//
@@ -733,6 +740,7 @@ namespace FinchControl_Starter
             myFinch.wait(1000);
             elapsedTime++;
 
+            DisplayAlarmSystem(myFinch);
             return thresholdExceeded;
         }
         #endregion
