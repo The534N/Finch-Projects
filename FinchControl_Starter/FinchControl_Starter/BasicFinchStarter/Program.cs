@@ -529,7 +529,7 @@ namespace FinchControl_Starter
                     break;
 
                 case 2:
-                    rangeType = DisplaySetRange();
+                    rangeType = DisplaySetRange(myFinch);
                     break;
 
                 case 3:
@@ -537,7 +537,7 @@ namespace FinchControl_Starter
                     break;
 
                 case 4:
-                    timeToMonitor = DisplayTimeToMonitor();
+                    timeToMonitor = DisplayTimeToMonitor(myFinch);
                     break;
 
                 case 5:
@@ -574,7 +574,7 @@ namespace FinchControl_Starter
         //---------//
         //Set Range//
         //---------//
-        static string DisplaySetRange()
+        static string DisplaySetRange(Finch myFinch)
         {
             string rangeType;
 
@@ -624,7 +624,7 @@ namespace FinchControl_Starter
         //----------------//
         //Set monitor time//
         //----------------//
-        static int DisplayTimeToMonitor()
+        static int DisplayTimeToMonitor(Finch myFinch)
         {
             int timeToMonitor;
             bool validResponse;
