@@ -10,7 +10,7 @@ namespace FinchControl_Starter
         // Author:Sean Donovan                                              //
         // Description:Coding assingments within Mission 3                  //
         // Date Created:2/27/2020                                           //
-        // Last Date Edited:01/03/2020                                      //       
+        // Last Date Edited:03/04/2020                                      //       
         //------------------------------------------------------------------//
 
         //----//
@@ -113,6 +113,7 @@ namespace FinchControl_Starter
                 case 3:
                     DisplayAlarmSystem(myFinch);
                     break;
+
                 default:
                     break;
             }
@@ -155,7 +156,7 @@ namespace FinchControl_Starter
                     break;
 
                 case 5:
-                    DisplayClosingScreen();
+                    DisplayMainMenu(myFinch);
                     break;
 
                 default:
@@ -545,7 +546,7 @@ namespace FinchControl_Starter
                     break;
 
                 case 6:
-                    DisplayClosingScreen();
+                    DisplayMainMenu(myFinch);
                     break;
 
                 default:
