@@ -101,6 +101,8 @@ namespace FinchControl_Starter
             Console.WriteLine("1.) Talent Show");
             Console.WriteLine("2.) Data Recorder");
             Console.WriteLine("3.) Alarm System");
+            Console.WriteLine("4.) ");
+            Console.WriteLine("5.) Quit Program");
             Console.WriteLine();
             double.TryParse(Console.ReadLine(), out assignment);
             switch (assignment)
@@ -117,6 +119,13 @@ namespace FinchControl_Starter
                     DisplayAlarmSystem(myFinch);
                     break;
 
+                case 4:
+
+                    break;
+
+                case 5:
+                    
+                    break;
                 default:
                     break;
             }
@@ -447,7 +456,7 @@ namespace FinchControl_Starter
             int frequencyInSeconds;
             DisplayHeader("Get Data");
 
-            Console.WriteLine($"You have {numberOfDataPoints} and {dataPointsFrequency}");
+            Console.WriteLine($"You have {numberOfDataPoints} data points and a frequency of {dataPointsFrequency}");
 
             Console.WriteLine("The finch robot is ready to record temperature");
             DisplayContinuePrompt();
@@ -486,12 +495,12 @@ namespace FinchControl_Starter
         static void DataRecorderDisplayTable(double[] temperatures)
         {
             Console.WriteLine(
-                "Data Point".PadLeft(12) +
-                "Temperature".PadLeft(10)
+                "Data Point".PadLeft(10) +
+                "Temperature".PadLeft(12)
                 );
             Console.WriteLine(
-                "----------".PadLeft(12) +
-                "-----------".PadLeft(10)
+                "----------".PadLeft(10) +
+                "-----------".PadLeft(12)
                 );
 
             for (int index = 0; index < temperatures.Length; index++)
@@ -502,7 +511,6 @@ namespace FinchControl_Starter
                      );
             }
 
-            DisplayContinuePrompt();
         }
         #endregion
 
