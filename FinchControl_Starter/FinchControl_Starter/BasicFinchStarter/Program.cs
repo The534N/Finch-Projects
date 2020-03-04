@@ -13,6 +13,7 @@ namespace FinchControl_Starter
         // Last Date Edited:03/04/2020                                      //       
         //------------------------------------------------------------------//
 
+        #region Prcedure
         //----//
         //Main//   
         //----//
@@ -42,6 +43,8 @@ namespace FinchControl_Starter
             //----------------------//
             myFinch.disConnect();
         }
+        #endregion
+
         #region Basic Screens
         //--------------//
         //Welcome Screen//
