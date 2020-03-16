@@ -1,8 +1,23 @@
 ﻿using FinchAPI;
 using System;
+using System.Collections.Generic;
 
 namespace FinchControl_Starter
 {
+    enum Command
+    {
+        NONE,
+        MOVEFORWARD,
+        MOVEBACKWARDS,
+        STOPMOTORS,
+        WAIT,
+        TURNRIGHT,
+        TURNLEFT,
+        LEDON,
+        LEDOFF,
+        GETTEMPERATURE,
+        DONE
+    }
     class Program
     {
         //------------------------------------------------------------------//
@@ -769,6 +784,115 @@ namespace FinchControl_Starter
         //-----------//
         static void DisplayUserProgram(Finch myFinch)
         {
+            double action;
+
+            (int motorSpeed, int ledBrightness, double waitSeconds) commandParameters;
+            commandParameters.motorSpeed = 0;
+            commandParameters.ledBrightness = 0;
+            commandParameters.waitSeconds = 0;
+
+            List<Command> commands = new List<Command>();
+
+            Console.Clear();
+
+            DisplayHeader("Alarm System");
+
+            Console.WriteLine("\nChoose an Action");
+            Console.WriteLine("1.) Set Command Perameters");
+            Console.WriteLine("2.) Add Commands");
+            Console.WriteLine("3.) View COmmands");
+            Console.WriteLine("4.) Execute Comands");
+            Console.WriteLine("5.) Quit");
+            Console.WriteLine();
+
+            double.TryParse(Console.ReadLine(), out action);
+            switch (action)
+            {
+                case 1:
+                    commandParameters = DisplayGetCommandParameters(myFinch);
+                    break;
+
+                case 2:
+                    DisplayGetFinchCommands();
+                    break;
+
+                case 3:
+                    DisplayFinchCommands();
+                    break;
+
+                case 4:
+                    DisplayExecuteCOmmands();
+                    break;
+
+                case 5:
+                    DisplayMainMenu(myFinch);
+                    break;
+
+
+                default:
+                    break;
+            }
+            //------------------//
+            //Command Parameters//
+            //------------------//
+            static (int motorSpeed, int ledBrightness, double waitSeconds) DisplayGetCommandParameters(Finch myFinch)
+            {
+                DisplayHeader("Command Parameters");
+
+                (int motorSpeed, int ledBrightness, double waitSeconds) commandParameters;
+                commandParameters.motorSpeed = 0;
+                commandParameters.ledBrightness = 0;
+                commandParameters.waitSeconds = 0;
+
+                GetValidInterger("\tEnter Motor Speed [1 - 255]:", 1, 255, out commandParameters.motorSpeed);
+                GetValidInterger("\tEnter LED Brightness [1 - 255]:", 1, 255, out commandParameters.ledBrightness);
+                GetValidDouble("Enter Wait in Seconds;", 0, 10, out commandParameters.waitSeconds);
+
+                Console.WriteLine();
+                Console.WriteLine($"\tMotor Speed: {commandParameters.motorSpeed}");
+                Console.WriteLine($"\tLED Brightness: {commandParameters.ledBrightness}");
+                Console.WriteLine($"\tWait Command Duration; {commandParameters.waitSeconds}");]
+
+                DisplayUserProgram(myFinch);
+
+                return commandParameters;
+            }
+            //------------//
+            //Get Commands//
+            //------------//
+            static void DisplayGetFinchCommands(List<Command> commands)
+            {
+                Command comands = Command.NONE;
+
+                DisplayHeader("Finch Robot Commands");
+
+                int commandCount = 1;
+                Console.WriteLine("\tList of Available Commands");
+                Console.WriteLine();
+                Console.WriteLine("\t-");
+                foreach (string commandName in Enum.GetNames(typeOf(Command)))
+                {
+                   Console.Write($"- {commandName.ToLower()} -");
+                    if (commandCount % 5 == 0) Console.WriteLine("-\n\t-");
+                    commandCount++;
+                }
+                Console.WriteLine();
+
+                while (Command != Command.DONE)
+                {
+                    Console.WriteLine("\tEnter Command");
+                    if (Enum.TryParse(Console.ReadLine().ToUpper(),out command))
+                    {
+                        comands.Add(command);
+                    }
+                    else
+                    {
+                        Console.WriteLine("\t\t-------------------------------------------");
+                        Console.WriteLine("\t\tPlease enter a command from the list above.");
+                        Console.WriteLine("\t\t-------------------------------------------");
+                    }
+                }
+            }
 
         }
         #endregion
