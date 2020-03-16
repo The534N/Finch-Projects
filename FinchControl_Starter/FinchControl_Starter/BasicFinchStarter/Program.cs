@@ -862,7 +862,7 @@ namespace FinchControl_Starter
             //------------//
             static void DisplayGetFinchCommands(List<Command> commands)
             {
-                Command comands = Command.NONE;
+                Command command = Command.NONE;
 
                 DisplayHeader("Finch Robot Commands");
 
@@ -883,7 +883,7 @@ namespace FinchControl_Starter
                     Console.WriteLine("\tEnter Command");
                     if (Enum.TryParse(Console.ReadLine().ToUpper(),out command))
                     {
-                        comands.Add(command);
+                        commands.Add(command);
                     }
                     else
                     {
