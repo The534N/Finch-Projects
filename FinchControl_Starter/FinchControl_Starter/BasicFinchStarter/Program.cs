@@ -821,7 +821,7 @@ namespace FinchControl_Starter
                     break;
 
                 case 4:
-                    DisplayExecuteCOmmands();
+                    DisplayExecuteCommands();
                     break;
 
                 case 5:
@@ -837,6 +837,8 @@ namespace FinchControl_Starter
             //------------------//
             static (int motorSpeed, int ledBrightness, double waitSeconds) DisplayGetCommandParameters(Finch myFinch)
             {
+                string userResponse;
+                bool validResponse;
                 DisplayHeader("Command Parameters");
 
                 (int motorSpeed, int ledBrightness, double waitSeconds) commandParameters;
@@ -844,14 +846,59 @@ namespace FinchControl_Starter
                 commandParameters.ledBrightness = 0;
                 commandParameters.waitSeconds = 0;
 
-                GetValidInterger("\tEnter Motor Speed [1 - 255]:", 1, 255, out commandParameters.motorSpeed);
-                GetValidInterger("\tEnter LED Brightness [1 - 255]:", 1, 255, out commandParameters.ledBrightness);
-                GetValidDouble("Enter Wait in Seconds;", 0, 10, out commandParameters.waitSeconds);
+                //-----------//
+                //Motor Speed//
+                //-----------//
+                do
+                {
+                    Console.WriteLine("\tEnter Motor Speed[1 - 255]:");
+                    userResponse = Console.ReadLine();
+
+                    validResponse = int.TryParse(userResponse, out commandParameters.motorSpeed);
+
+                    if (!validResponse)
+                    {
+                        Console.WriteLine("Incorrect format");
+                    }
+
+                } while (validResponse == false);
+                //--------------//
+                //LED Brightness//
+                //--------------//
+                do
+                {
+                    Console.WriteLine("\tEnter LED Brightness [1 - 255]:");
+                    userResponse = Console.ReadLine();
+
+                    validResponse = int.TryParse(userResponse, out commandParameters.ledBrightness);
+
+                    if (!validResponse)
+                    {
+                        Console.WriteLine("Incorrect format");
+                    }
+
+                } while (validResponse == false);
+                //---------//
+                //Wait Time//
+                //---------//
+                do
+                {
+                    Console.WriteLine("Enter Wait in Seconds;");
+                    userResponse = Console.ReadLine();
+
+                    validResponse = double.TryParse(userResponse, out commandParameters.waitSeconds);
+
+                    if (!validResponse)
+                    {
+                        Console.WriteLine("Incorrect format");
+                    }
+
+                } while (validResponse == false);
 
                 Console.WriteLine();
                 Console.WriteLine($"\tMotor Speed: {commandParameters.motorSpeed}");
                 Console.WriteLine($"\tLED Brightness: {commandParameters.ledBrightness}");
-                Console.WriteLine($"\tWait Command Duration; {commandParameters.waitSeconds}");]
+                Console.WriteLine($"\tWait Command Duration; {commandParameters.waitSeconds}");
 
                 DisplayUserProgram(myFinch);
 
