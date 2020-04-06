@@ -1,6 +1,7 @@
 ﻿using FinchAPI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace FinchControl_Starter
 {
@@ -44,7 +45,6 @@ namespace FinchControl_Starter
             // connect to finch//
             //-----------------//
             myFinch.connect();
-            Console.ForegroundColor = ConsoleColor.Green;
 
             //-------//
             //Process//
@@ -117,7 +117,8 @@ namespace FinchControl_Starter
             Console.WriteLine("2.) Data Recorder");
             Console.WriteLine("3.) Alarm System");
             Console.WriteLine("4.) User Program");
-            Console.WriteLine("5.) Quit");
+            Console.WriteLine("5.) Settings");
+            Console.WriteLine("6.) Quit");
             Console.WriteLine();
             double.TryParse(Console.ReadLine(), out assignment);
             switch (assignment)
@@ -139,11 +140,124 @@ namespace FinchControl_Starter
                     break;
 
                 case 5:
+                    DisplaySettings(myFinch);
+                    break;
+
+                case 6:
 
                     break;
                 default:
                     break;
             }
+        }
+
+        //--------//
+        //Settings//
+        //--------//
+        static void DisplaySettings(Finch myFinch)
+        {
+            (ConsoleColor foregroundColor, ConsoleColor backgroundColor) themeColors;
+            bool themeChosen = false;
+            string fileIOStatusMessage;
+
+            DisplayHeader("Set New Theme");
+
+            Console.WriteLine($"\tCurrent foreground color: {Console.ForegroundColor}");
+            Console.WriteLine($"\tCurrent background color: {Console.BackgroundColor}");
+            Console.WriteLine();
+
+            Console.Write("\tWould you like to change the current theme [ yes | no ]?");
+            if (Console.ReadLine().ToLower() == "yes")
+            {
+                do
+                {
+                    //
+                    // query the user for console colors
+                    //
+                    themeColors.foregroundColor = GetConsoleColorFromUser("foreground");
+                    themeColors.backgroundColor = GetConsoleColorFromUser("background");
+
+                    //
+                    // set new theme
+                    //
+                    Console.ForegroundColor = themeColors.foregroundColor;
+                    Console.BackgroundColor = themeColors.backgroundColor;
+                    Console.Clear();
+                    DisplayHeader("Set Application Theme");
+                    Console.WriteLine($"\tNew foreground color: {Console.ForegroundColor}");
+                    Console.WriteLine($"\tNew background color: {Console.BackgroundColor}");
+
+                    Console.WriteLine();
+                    Console.Write("\tIs this the theme you would like?");
+                    if (Console.ReadLine().ToLower() == "yes")
+                    {
+                        themeChosen = true;
+                        fileIOStatusMessage = WriteThemeDataExceptions(themeColors.foregroundColor, themeColors.backgroundColor);
+                        if (fileIOStatusMessage == "Complete")
+                        {
+                            Console.WriteLine("\n\tNew theme written to data file.\n");
+                        }
+                        else
+                        {
+                            Console.WriteLine("\n\tNew theme not written to data file.");
+                            Console.WriteLine($"\t*** {fileIOStatusMessage} ***\n");
+                        }
+                    }
+
+                } while (!themeChosen);
+            }
+            DisplayMainMenu(myFinch);
+        }
+        //-------------//
+        //Console Color//
+        //-------------//
+        static ConsoleColor GetConsoleColorFromUser(string property)
+        {
+            ConsoleColor consoleColor;
+            bool validConsoleColor;
+
+            do
+            {
+                Console.Write($"\tEnter a value for the {property}:");
+                validConsoleColor = Enum.TryParse<ConsoleColor>(Console.ReadLine(), true, out consoleColor);
+
+                if (!validConsoleColor)
+                {
+                    Console.WriteLine("\n\t***** It appears you did not provide a valid console color. Please try again. *****\n");
+                }
+                else
+                {
+                    validConsoleColor = true;
+                }
+
+            } while (!validConsoleColor);
+
+            return consoleColor;
+        }
+        //---------------//
+        //Data Exceptions//
+        //---------------//
+        static string WriteThemeDataExceptions(ConsoleColor foreground, ConsoleColor background)
+        {
+            string dataPath = @"Data/Theme.txt";
+            string fileIOStatusMessage = "";
+
+            try
+            {
+                File.WriteAllText(dataPath, foreground.ToString() + "\n");
+                File.AppendAllText(dataPath, background.ToString());
+                fileIOStatusMessage = "Complete";
+            }
+            catch (DirectoryNotFoundException)
+            {
+                fileIOStatusMessage = "Unable to locate the folder for the data file.";
+            }
+            catch (Exception)
+            {
+                fileIOStatusMessage = "Unable to write to data file.";
+            }
+
+            return fileIOStatusMessage;
         }
         #endregion
 
